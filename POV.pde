@@ -24,20 +24,14 @@ class POV {
   
   // Not sure if these next two methods are implemented correctly
   public void rotate(PVector delta, float deltaUp) {
-    // Construct a new PVector, in case it isn't desirable to change
-    // the original
-    PVector rotatedDelta = new PVector(delta.x, delta.y, delta.z);
-    rotatedDelta.rotate(radians(deltaUp % 360));
-    direction.add(rotatedDelta);
+    direction.set((direction.X + delta.X) % 360, (direction.Y + delta.Y) % 360, (direction.Z + delta.Z) % 360)
   }
   
   
   // Would it make more sense for this method to take a PVector
   // rather than three floats?
-  public void setAngle(float x, float y, float z, float newUp) {
-    PVector newAngle = new PVector(x, y, z);
-    newAngle.rotate(radians(newUp % 360));
-    this.orientation = newAngle;
+  public void setAngle(Pvector point, float newUp) {
+      direction.set(point.X % 360, point.Y % 360, point.Z % 360)
   }
     
    
