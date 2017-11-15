@@ -15,6 +15,6 @@ Renderer.pde
 class Renderer {
   int TopLeft;
   int BottomRight;
-  public Renederer(int TL, int BR)
+  public Renederer(int TL, int BR);
   public Render(Model subject, POV perspective); 
  }
