@@ -17,17 +17,18 @@ public class Model
 {
   private ArrayList<Facet> facets;
   private ArrayList<Line>  layers;
-  private String           Adress;
+  private String           address;
   
   private boolean isModified;
-  private boolean Synchronized;
+  private boolean isSynchronized;
   
   
-  Private PVector Center;
+  private PVector center;
   
-  public Model(ArrayList<Facet> facets, String Adress)
+  public Model(ArrayList<Facet> facets, String address)
   {
     this.facets = facets;
+    this.address = address;
     isModified = true;
     scaling = new PVector(0, 0, 0);
     rotation = new PVector(0, 0, 0);
@@ -49,13 +50,27 @@ public class Model
   
   public void setScaling(PVector amount)
   {
-    //TODO this function must update the value of centeras well as the coridantes of each point of the facets
+      
+    // This updates the facet vertex coordinates
+    // Code still needs to be added to update center
+    for (Facet facet : facets) {
+      PVector vertices[] = facet.getVertices();
+      vertices[0] = PVector.mult(amount);
+      vertices[1] = PVector.mult(amount);
+      vertices[2] = PVector.mult(amount);
+      facet.setVertices(vertices[0], vertices[1], vertices[2]); 
+    }
+    
+    //TODO this function must update the value of center as well as the coordinates of each point of the facets
     isModified = checkModifications();
   }
   
-  public void setRoation(PVector amount)
+  
+  // Spelling fix
+  public void setRotation(PVector amount)
   {
-    //TODO this function must rotate all ponints around the center acording to the X, Y, & Z rotation in amount
+    //TODO this function must rotate all points around the center according to the X, Y, & Z rotation in amount
+    
     isModified = checkModifications();
   }
   
@@ -68,13 +83,16 @@ public class Model
   
   //this function will read the gcode from the 
   //adress provided in the constuctor to sycronize the facet reprprsentation to the G-code reprprsentation
-  public void synchronize()
+  public bool synchronize()
   {
     if(isModified){
          //TODO
     }
   }
   
+  
+  // This method is probably superflous, apparently a built-in
+  // PVector.equals() method already exists.
   private boolean pVectorEquals(PVector a, PVector b)
   {
     return a.x == b.x && a.y == b.y && a.z == b.z;
