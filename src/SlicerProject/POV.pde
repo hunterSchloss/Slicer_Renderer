@@ -1,12 +1,12 @@
 class POV {
   
   private PVector location;
-  private PVector direction;
-  private float orientation;
+  private PVector foucus;
+  private PVector orientation; //each feild must be -1, 0, 1
   private Model subject;
-  private RenderController controller;
 
-  public POV(Model subject, RenderController controller) {
+  public POV(Model subject, PVector loc, PVector fouc, PVector Ori)
+  {
     this.subject = subject;
     this.controller = controller;
     this.location = new PVector(0, 0, 0);
@@ -28,23 +28,12 @@ class POV {
   }
   
   
-  // Would it make more sense for this method to take a PVector
-  // rather than three floats?
-  public void setAngle(Pvector point, float newUp) {
-      direction.set(point.x % 360, point.y % 360, point.z % 360);
+  public Camera getCamera(){
+    return new camera(location.X, location.Y, location.Z, foucus.X, foucus.Y, foucus.Z, orientation.X, orientation.Y, orientation.Z);
   }
+
     
    
-  public PVector getLocation() {
-    return this.location;
-  }
-  
-  public PVector getDirection() {
-    return this.direction;
-  }
-  
-  public float getOrientation() {
-    return this.orientation;
-  }
+ 
   
 }
