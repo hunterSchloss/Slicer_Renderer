@@ -16,15 +16,19 @@ Authors: Slicing Team (Andrew Figueroa)
 public class Model
 {
   private ArrayList<Facet> facets;
-  private boolean isModified;
-  private PVector scaling;
-  private PVector rotation;
-  private PVector translation;
+  private ArrayList<Line>  layers;
+  private String           Adress;
   
-  public Model(ArrayList<Facet> facets)
+  private boolean isModified;
+  private boolean Synchronized;
+  
+  
+  Private PVector Center;
+  
+  public Model(ArrayList<Facet> facets, String Adress)
   {
     this.facets = facets;
-    isModified = false;
+    isModified = true;
     scaling = new PVector(0, 0, 0);
     rotation = new PVector(0, 0, 0);
     translation = new PVector(0, 0, 0);
@@ -36,40 +40,39 @@ public class Model
   }
   
   public void setFacets(ArrayList<Facet> newFacets) {
+    //TODO this function must also calculate the center and reset scalling and translation
+    scaling = new PVector(0, 0, 0);
+    translation = new PVector(0, 0, 0);
     facets = newFacets;
   }
   
-  public PVector getScale()
-  {
-    return scaling; 
-  }
   
   public void setScaling(PVector amount)
   {
-    //TODO
+    //TODO this function must update the value of centeras well as the coridantes of each point of the facets
     isModified = checkModifications();
-  }
-  
-  public PVector getRoatation()
-  {
-    return rotation; 
   }
   
   public void setRoation(PVector amount)
   {
-    //TODO
+    //TODO this function must rotate all ponints around the center acording to the X, Y, & Z rotation in amount
     isModified = checkModifications();
   }
   
-  public PVector getTranslation()
-  {
-    return translation;
-  }
   
   public void setTranslation(PVector amount)
   {
-    translation = amount;
+    //TODO this function must update the value of center and Translation as well as the coridantes of each point of the facets
     isModified = checkModifications();
+  }
+  
+  //this function will read the gcode from the 
+  //adress provided in the constuctor to sycronize the facet reprprsentation to the G-code reprprsentation
+  public void synchronize()
+  {
+    if(isModified){
+         //TODO
+    }
   }
   
   private boolean pVectorEquals(PVector a, PVector b)
@@ -77,10 +80,11 @@ public class Model
     return a.x == b.x && a.y == b.y && a.z == b.z;
   }
   
+  //this function returns true if the facets reprsent the the current G-code
   private boolean checkModifications()
   {
-    PVector origin = new PVector(0, 0, 0);
-    return pVectorEquals(scaling, origin) && pVectorEquals(rotation, origin)
-           && (pVectorEquals(translation, origin));
+    return isModified;
   }
-}
+  
+
+
