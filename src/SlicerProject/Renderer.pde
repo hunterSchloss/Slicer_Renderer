@@ -1,4 +1,4 @@
-*
+/*
 Renderer.pde
  
  This Sketchbook tab holds the definition and implementation of the Renderer interface.
