@@ -15,70 +15,128 @@ Authors: Slicing Team (Andrew Figueroa)
 
 public class Model
 {
-  private ArrayList<Facet> facets;
+  private ArrayList<Facet> facets;     
+  private ArrayList<String>  G-code;
   private ArrayList<Line>  layers;
-  private String           address;
-  
-  private boolean isModified;
-  private boolean isSynchronized;
   
   
-  private PVector center;
+  private boolean FBeingRendered; //is set to true while the facets are being rendered
+  private boolean GBeingRendered; //is set to true while the facets are being rendered
   
-  public Model(ArrayList<Facet> facets, String address)
+  private boolean FBeingModified; //this is set to true while the facets are being modifed 
+  private boolean GBeingModified; //this is set to true while the Facets are being sliced
+  private boolean LBeingModified; //this is set to true while the G-code is being simulated
+  
+  private boolean isModified;    //this is set to true when the facets have been modifed but 
+                                 //not converted to G-code comands
+                                 
+  private boolean isSynchronized;//this is set to true when the layers reprsent a simulation 
+                                 //of the G-code produced from the current faccets 
+  
+  
+  private PVector center;        //gemotric center of the facets 
+  
+  
+  public Model(ArrayList<Facet> facets)
   {
-    this.facets = facets;
-    this.address = address;
+    FBeingModified = true;
+    GBeingModified = false;
+    LBeingModified = false;
     isModified = true;
-    scaling = new PVector(0, 0, 0);
-    rotation = new PVector(0, 0, 0);
-    translation = new PVector(0, 0, 0);
+    isSynchronized = false;
+    
+    this.facets = facets;
+    
+    //TODO must compute geometric mean of facets
+  
+    FBeingModified = false;
   }
   
-  public ArrayList<Facet> getFacets()
-  {
-    return facets;
+  public Slice(float layerHeight, float infill){
+      GBeingModified = true;
+      Slicer alg(facets, layerHeight, infill);
+      layers = alg.sliceLayers();
+      G-code = alg.createGCode(layers);
+      GBeingModified = false;
+            
+  }
+  
+  public Render(Renderer Alg, POV perspective){
+       if(Alg.GetType()){
+          GBeingRendered = true;
+       }
+       else{
+          FBeingRendered = true;
+       }
+       Alg.render(perspective);
+       if(GBeingRendered){
+           GBeingRendered = false;
+       }
+       else{
+          FBeingRendered = false;
+       }
   }
   
   public void setFacets(ArrayList<Facet> newFacets) {
-    //TODO this function must also calculate the center and reset scalling and translation
-    scaling = new PVector(0, 0, 0);
-    translation = new PVector(0, 0, 0);
+    FBeingModified = true; 
+    isModified = true;
+    isSynchronized = false;
     facets = newFacets;
+    //TODO this function must also calculate the center
+     FBeingModified = false;
   }
   
   
   public void setScaling(PVector amount)
   {
+      if(!FbeingModified && amount.X == 0 && amount.Y == 0 && amount.Z == 0){
+          return;
+      }
+      FBeingModified = true; 
+      isModified = true;
+      isSynchronized = false;
       
-    // This updates the facet vertex coordinates
-    // Code still needs to be added to update center
+    //This updates the facet vertex coordinates
+    //center does not need to be recomputed because mean of all cordnats wont change
     for (Facet facet : facets) {
       PVector vertices[] = facet.getVertices();
-      vertices[0] = PVector.mult(amount);
-      vertices[1] = PVector.mult(amount);
-      vertices[2] = PVector.mult(amount);
+      vertices[0].mult(amount);
+      vertices[1].mult(amount);
+      vertices[2].mult(amount);
       facet.setVertices(vertices[0], vertices[1], vertices[2]); 
     }
-    
-    //TODO this function must update the value of center as well as the coordinates of each point of the facets
-    isModified = checkModifications();
+    FBeingModified = false; 
   }
   
   
-  // Spelling fix
+  
   public void setRotation(PVector amount)
   {
+     if(!FbeingModified && amount.X == 0 && amount.Y == 0 && amount.Z == 0)
+      {
+          return;
+      }
+      FBeingModified = true; 
+      isModified = true;
+      isSynchronized = false;
     //TODO this function must rotate all points around the center according to the X, Y, & Z rotation in amount
     
-    isModified = checkModifications();
+      FBeingModified = false;
   }
   
   
   public void setTranslation(PVector amount)
   {
+    if(!FbeingModified && amount.X == 0 && amount.Y == 0 && amount.Z == 0)
+      {
+          return;
+      }
+      FBeingModified = true; 
+      isModified = true;
+      isSynchronized = false;
+    
     //TODO this function must update the value of center and Translation as well as the coridantes of each point of the facets
-    isModified = checkModifications();
+      FBeingModified = false;
   }
   
   //this function will read the gcode from the 
@@ -91,17 +149,16 @@ public class Model
   }
   
   
-  // This method is probably superflous, apparently a built-in
-  // PVector.equals() method already exists.
-  private boolean pVectorEquals(PVector a, PVector b)
-  {
-    return a.x == b.x && a.y == b.y && a.z == b.z;
-  }
   
   //this function returns true if the facets reprsent the the current G-code
   private boolean checkModifications()
   {
     return isModified;
+  }
+  
+  public ArrayList<Facet> getFacets()
+  {
+    return facets;
   }
   
 
