@@ -14,9 +14,7 @@ the only functio
 
 class FacetRenderer {
 
-    public FacetRenderer(int TL, int BR){
-      TopLeft = TL;
-      BottomRight = BR;
+    public FacetRenderer(){
     }
     
     public Render(Model subject, POV perspective){
