@@ -1,31 +1,35 @@
 /*
 FacetRenderer.pde
  
- This Sketchbook tab holds the definition and implementation of the Facet Renderer class.
+This Sketchbook tab holds the definition and implementation of the Facet Renderer class.
  
 the Facet Renderer class is an implintaion of the Renderer interface for rendering Facets 
-the only functio
+
  
  Authors:
- Slicing Team
- Chris Iossa (https://www.github.com/ChrisIossa)
- Paul Canada
+Rendering Team
+Hunter Schloss
  */
 
-class FacetRenderer {
+class FacetRenderer implements Renderer{
 
     public FacetRenderer(){
     }
     
-    public Render(Model subject, POV perspective){
+    public Render(Model subject) {
        beginCamera();
-       camera()
+       camera(); //TODO how to get camera
+       ArrayList<Facet> temp = subject.getFacets();
+       
+       for (Facet facet : temp) {
+              beginShape();
+              PVector[] Triangle = facet.getVerticies();
+              vertex(Triangle[0].x, Triangle[0].y, Triangle[0].z);
+              vertex(Triangle[1].x, Triangle[1].y, Triangle[1].z);
+              vertex(Triangle[2].x, Triangle[2].y, Triangle[2].z);
+              endShape();    
+       }
        endCamera();
-    }
-    
-    
-    private void DrawFacet(Facet in){
-    
     }
     
 }

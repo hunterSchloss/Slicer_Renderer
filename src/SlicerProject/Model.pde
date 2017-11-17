@@ -16,15 +16,19 @@ Authors: Slicing Team (Andrew Figueroa)
 public class Model
 {
   private ArrayList<Facet> facets;     
-  private ArrayList<String>  G-code;
+  private ArrayList<String>  GCode;
   private ArrayList<Line>  layers;
   
-  float layerHeight;
-  float inFill;
+  private float BuildPlateWidth;
+  private float BuildPlateHeight;
+   private float BuildPlate;
   
-  POV perspective;                //the point of view for the renderer
+  private float layerHeight;
+  private float inFill;
   
-  Renderer visulizer;
+  private POV perspective;                //the point of view for the renderer
+  
+  private Renderer visulizer;
   
   private PVector center;        //gemotric center of the facets
   
@@ -34,30 +38,32 @@ public class Model
                             
   
   
-  public Model(ArrayList<Facet> facets, float LH, float IF, POV per, boolean mode)
+  public Model(ArrayList<Facet> facets, float LH, float IF)
   {
-        isModified = true;
-        RenderMode = true;
-        this.facets = facets;
-        this.inFill = IF;
+        //set state variables
+        isModified = true;      //facets need to be sliced to G-code
+        RenderMode = true;      //Facets should be rendered
+        
+        
+        this.facets = facets;  //initilize facets
+        
+        //set slicing setting      
+        this.inFill = IF;             
         this.layerHeight = LH;
+        
+        //set Rendering settting 
         this.perspective = per;
         this.RenderFacets = mode;
-        if(RenderFacets){
-            this.visulizer = FacetRender();
-        }
-        else{
-            this.visulizer = LayerRender();
-        }
-        
+        this.visulizer = FacetRenderer();       
         
         //TODO must compute geometric mean of facets
+        
          
-  }
   
   
-  public void Slice(float layerHeight, float infill){
-          if(isModified){
+  
+  public void Slice(){
+          if( isModified ) {
              Slicer alg(facets, layerHeight, infill);
              layers = alg.sliceLayers();
              G-code = alg.createGCode(layers);    
@@ -160,5 +166,3 @@ public class Model
   
  
   
-
-
