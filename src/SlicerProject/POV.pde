@@ -1,16 +1,19 @@
 class POV {
   
   private PVector location;
-  private PVector foucus;
+  private PVector focus;
   private PVector orientation; //each feild must be -1, 0, 1
+  Private PVector TopLeft;
+  Private PVector BottomRight;
   private Model subject;
 
-  public POV(Model subject, PVector loc, PVector fouc, PVector Ori)
+  public POV(PVector loc, PVector foc, PVector Ori, PVector TL, PVector BR)
   {
-    this.subject = subject;
-    this.controller = controller;
-    this.location = new PVector(0, 0, 0);
-    this.direction = new PVector(0, 0, 0);
+    this.location = loc;
+    this.focus = foc;
+    this.orientation = Ori;
+    this.TopLeft = TL;
+    this.BottomRight = BR;
   }
     
   
@@ -23,17 +26,36 @@ class POV {
   }
   
   // Not sure if these next two methods are implemented correctly
-  public void rotate(PVector delta, float deltaUp) {
-    direction.set((direction.x + delta.x) % 360, (direction.y + delta.y) % 360, (direction.z + delta.z) % 360);
+  public void rotate(PVector delta) {
+    //TODO
+  }
+  
+  public void SetFoucus(PVector delta){
+        focus = delta;
+  }
+  
+  public void setUp(PVector up){
+        orientation = up;
   }
   
   
   public Camera getCamera(){
     return new camera(location.X, location.Y, location.Z, foucus.X, foucus.Y, foucus.Z, orientation.X, orientation.Y, orientation.Z);
   }
-
-    
-   
- 
   
+  public PVector getTopLeft(){
+        return TopLeft;
+  }
+  
+   public void setTopLeft(Pvector in){
+       TopLeft = in;
+  }
+  
+   public PVector getBottomRight(){
+        return BottomRight;
+  }  
+  
+  public void setBottomRight(Pvector in){
+       BottomRight = in;
+  }
 }
