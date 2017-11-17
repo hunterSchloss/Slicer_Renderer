@@ -19,82 +19,67 @@ public class Model
   private ArrayList<String>  G-code;
   private ArrayList<Line>  layers;
   
+  float layerHeight;
+  float inFill;
   
-  private boolean FBeingRendered; //is set to true while the facets are being rendered
-  private boolean GBeingRendered; //is set to true while the facets are being rendered
+  POV perspective;                //the point of view for the renderer
   
-  private boolean FBeingModified; //this is set to true while the facets are being modifed 
-  private boolean GBeingModified; //this is set to true while the Facets are being sliced
-  private boolean LBeingModified; //this is set to true while the G-code is being simulated
+  Renderer visulizer;
   
-  private boolean isModified;    //this is set to true when the facets have been modifed but 
-                                 //not converted to G-code comands
-                                 
-  private boolean isSynchronized;//this is set to true when the layers reprsent a simulation 
-                                 //of the G-code produced from the current faccets 
+  private PVector center;        //gemotric center of the facets
   
   
-  private PVector center;        //gemotric center of the facets 
+ private boolean isModified;
+ private boolean RenderFacets;
+                            
   
   
-  public Model(ArrayList<Facet> facets)
+  public Model(ArrayList<Facet> facets, float LH, float IF, POV per, boolean mode)
   {
-    FBeingModified = true;
-    GBeingModified = false;
-    LBeingModified = false;
-    isModified = true;
-    isSynchronized = false;
-    
-    this.facets = facets;
-    
-    //TODO must compute geometric mean of facets
-  
-    FBeingModified = false;
+        isModified = true;
+        RenderMode = true;
+        this.facets = facets;
+        this.inFill = IF;
+        this.layerHeight = LH;
+        this.perspective = per;
+        this.RenderFacets = mode;
+        if(RenderFacets){
+            this.visulizer = FacetRender();
+        }
+        else{
+            this.visulizer = LayerRender();
+        }
+        
+        
+        //TODO must compute geometric mean of facets
+         
   }
   
-  public Slice(float layerHeight, float infill){
-      GBeingModified = true;
-      Slicer alg(facets, layerHeight, infill);
-      layers = alg.sliceLayers();
-      G-code = alg.createGCode(layers);
-      GBeingModified = false;
-            
+  
+  public void Slice(float layerHeight, float infill){
+          if(isModified){
+             Slicer alg(facets, layerHeight, infill);
+             layers = alg.sliceLayers();
+             G-code = alg.createGCode(layers);    
+             synchronize();
+             isModified = false;
+          }
   }
   
-  public Render(Renderer Alg, POV perspective){
-       if(Alg.GetType()){
-          GBeingRendered = true;
-       }
-       else{
-          FBeingRendered = true;
+  
+  public void Render(){ 
+       if(!RenderFacets && isModified){
+          Slice();
        }
        Alg.render(perspective);
-       if(GBeingRendered){
-           GBeingRendered = false;
-       }
-       else{
-          FBeingRendered = false;
-       }
-  }
-  
-  public void setFacets(ArrayList<Facet> newFacets) {
-    FBeingModified = true; 
-    isModified = true;
-    isSynchronized = false;
-    facets = newFacets;
-    //TODO this function must also calculate the center
-     FBeingModified = false;
   }
   
   
   public void setScaling(PVector amount)
   {
-      if(!FbeingModified && amount.X == 0 && amount.Y == 0 && amount.Z == 0){
+      if(amount.X == 0 && amount.Y == 0 && amount.Z == 0){
           return;
       }
-      FBeingModified = true; 
-      isModified = true;
-      isSynchronized = false;
       
     //This updates the facet vertex coordinates
     //center does not need to be recomputed because mean of all cordnats wont change
@@ -104,62 +89,76 @@ public class Model
       vertices[1].mult(amount);
       vertices[2].mult(amount);
       facet.setVertices(vertices[0], vertices[1], vertices[2]); 
-    }
-    FBeingModified = false; 
+    } 
+    isModified = true;
+    Render();
   }
   
   
   
   public void setRotation(PVector amount)
   {
-     if(!FbeingModified && amount.X == 0 && amount.Y == 0 && amount.Z == 0)
+     if(amount.X == 0 && amount.Y == 0 && amount.Z == 0)
       {
           return;
       }
-      FBeingModified = true; 
-      isModified = true;
-      isSynchronized = false;
     //TODO this function must rotate all points around the center according to the X, Y, & Z rotation in amount
-    
-      FBeingModified = false;
+    isModified = true;
+    Render();
   }
-  
   
   public void setTranslation(PVector amount)
   {
-    if(!FbeingModified && amount.X == 0 && amount.Y == 0 && amount.Z == 0)
+    if(amount.X == 0 && amount.Y == 0 && amount.Z == 0)
       {
           return;
       }
-      FBeingModified = true; 
-      isModified = true;
-      isSynchronized = false;
     
     //TODO this function must update the value of center and Translation as well as the coridantes of each point of the facets
-      FBeingModified = false;
+    isModified = true;
+    Render();
+  }
+  
+  public void setInfill(float newFill){
+      inFill = newFill
+      isModified = true;
+  }
+  
+  public float getInFill{
+       return inFill;
+  }
+  
+   public void setLayerHeight(float newH){
+      layerHeight = newH;
+      isModified = true;
+  }
+  
+  public float getGetLayerHeight(){
+       return layerHeight;
+  }
+  
+  public void setPOV(POV newPOV){
+      perspective = newPOV;
+      Reneder();
+  }
+  
+  public float getGetLayerHeight(){
+       return perspective;
+  }
+  
+   public ArrayList<Facet> getFacets()
+  {
+    return facets;
   }
   
   //this function will read the gcode from the 
   //adress provided in the constuctor to sycronize the facet reprprsentation to the G-code reprprsentation
-  public bool synchronize()
+  private bool synchronize()
   {
-    if(isModified){
-         //TODO
-    }
+
   }
   
-  
-  
-  //this function returns true if the facets reprsent the the current G-code
-  private boolean checkModifications()
-  {
-    return isModified;
-  }
-  
-  public ArrayList<Facet> getFacets()
-  {
-    return facets;
-  }
+ 
   
 
 
