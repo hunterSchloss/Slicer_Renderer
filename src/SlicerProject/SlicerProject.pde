@@ -11,8 +11,8 @@ Authors:
 //This function is automatically called when the project is run/executed.
 // Once this function finished executing, the draw function is called (repeatedly).
 void setup() {
+  size(200, 200, P3D);
   
- 
   
 }
 

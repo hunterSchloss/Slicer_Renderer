@@ -12,7 +12,6 @@ Renderer.pde
   Hunter Schloss
  */
 
-class Renderer {
-  public Renederer();
-  public Render(Model subject); 
+interface Renderer {
+  public PGraphics Render(PGraphics graphic, Model Subject); 
  }

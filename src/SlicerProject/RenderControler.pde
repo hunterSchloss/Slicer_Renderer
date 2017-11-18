@@ -1,104 +1,152 @@
 /*
 RenderControler.pde
 This Sketchbook tab holds the definition and implementation of the RenderControler class.
-The RenderControler class is used to coridinate all build space related rendering durring operation
-it contains functions for rendering the build space and either STL or G-Code models
+The RenderControler class is used to coridinate to preform all rendering od the model and the build space
+
  
 Authors: Rendering Team (Hunter Schloss)
 */
 
 
 public class RenderControler
-  {
-    private PVector TopLeft;
-    private PVector BottomRight;
-    
+  {    
     private float   Width;
     private float   Length;
     private float   Height;
     
     private POV     Camera;
     
+    private Renderer Visualizer;
+    
     private boolean RenderFacets;
     
     
     
     
-    public RenderControler(Pvector TL, PVector BR, float W, float L, float H)
+    public RenderControler(float W, float L, float H)
       {
-        TopLeft = TL;
-        BottomRight = BR;
         Width = W;
         Length = L;
-        Height = H
+        Height = H;
         
         RenderFacets = true;
         
         ResetCamera();
-        RenderBuildSpace();
       }
      
-    public void Render(Model Subject)
+    public PGraphics Render(Model Subject, PGraphics frame)
       {
-        if(RenderFacets)
+        frame.beginCamera();
+        Camera.setCamera(frame);
+        frame = addBuildSpace(frame);
+        if(Subject.isModified() && !RenderFacets)
           {
-            if(subject.getIsModified())
-              {
-                RenderBuildSpace();
-                Subject.slice();
-              }
-            LayerRenderer().Render(Subect);
+            Subject.Slice();
           }
-        else
-          {
-            FacetRenderer().Render(Subject);
-          }
-          
+        frame = Visualizer.Render(frame, Subject);
+        return frame;
       }
   
-    public void RenderBuildSpace()
+    public PGraphics RenderBuildSpace(PGraphics frame)
       {
-        //TODO render Translucint Gray walls and ceilling as well as an opaque floor
+        frame.beginCamera();
+        frame = Camera.setCamera(frame);
+        frame = addBuildSpace(frame);
+        return frame;
+        
+      }
+      
+    private PGraphics addBuildSpace (PGraphics frame)
+      {
+         frame.fill(153);
+         frame.tint(255, 32);
+         
+         
+         //front wall
+         frame.beginShape();
+         frame.vertex(0, 0, 0);
+         frame.vertex(0, 0, Height);
+         frame.vertex(Width, 0, Height);
+         frame.vertex(Width, 0, 0);
+         frame.endShape();
+         
+         //left wall
+         frame.beginShape();
+         frame.vertex(0, 0, 0);
+         frame.vertex(0, 0, Height);
+         frame.vertex(0, Length, Height);
+         frame.vertex(0, Length, 0);
+         frame.endShape();
+         
+         //right wall
+         frame.beginShape();
+         frame.vertex(Width, 0, 0);
+         frame.vertex(Width, 0, Height);
+         frame.vertex(Width, Length, Height);
+         frame.vertex(Width, Length, 0);
+         frame.endShape();
+         
+         //back wall
+         frame.beginShape();
+         frame.vertex(0, Length, 0);
+         frame.vertex(0, Length, Height);
+         frame.vertex(Width, Length, Height);
+         frame.vertex(Width, Length, 0);
+         frame.endShape();
+         
+         //floor
+         frame.tint(255, 255);
+         frame.beginShape();
+         frame.vertex(0, 0, 0);
+         frame.vertex(0, Length, 0);
+         frame.vertex(Width, Length, 0);
+         frame.vertex(Width, 0, 0);
+         frame.endShape();
+         
+         return frame; 
       }
   
     public void ResetCamera()
       {
-        //TODO decided where the camera should start
+        //TODO deceied where camera starts Camera.setpos();
+        //TODO deceied where focus startsCamera.setFocus(); 
+        Camera.setUp(new PVector(1,1,1));
       }
-      
-  
-    public PVector[] getFrame()
+     
+    public void FocusOnModel(Model Subject)
       {
-        Pvector[] temp;
-        temp[0] = TopLeft;
-        temp[1] = BottomRight;
-        return temp;
-      }
-  
-    public void setFrame(Pvector TL, PVector BR)
-      {
-        TopLeft = TL;
-        BottomRight = BR;
+        Camera.setFocus(Subject.getCenter());
       }
   
     public float[] getDim()
       {
-        float[] temp;
+        float[] temp = new float[3];
         temp[0] = Width;
         temp[1] = Length;
         temp[2] = Height;
-        return temp
+        return temp;
       }
   
     public void setDim(float w, float l, float h)
       {
         Width = w;
-        Length = l
+        Length = l;
         Height = h;
       }
       
     public void SetMode(boolean mode)
       {
-        RenderMode = mode;
+        if(mode != RenderFacets)
+          {
+            RenderFacets = mode;
+            if(RenderFacets)
+              {
+                Visualizer = new FacetRenderer();
+              }
+            else
+              {
+                //Visualizer = new LayerRendrer();
+              }            
+          }
       }
   }
