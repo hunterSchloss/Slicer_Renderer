@@ -30,13 +30,15 @@ public class RenderControler
         Height = H;
         
         RenderFacets = true;
-        
         ResetCamera();
       }
      
     public PGraphics Render(Model Subject, PGraphics frame)
       {
+        
         frame.beginCamera();
+        frame.lights();
+        frame.background(0);
         Camera.setCamera(frame);
         frame = addBuildSpace(frame);
         if(Subject.isModified() && !RenderFacets)
@@ -44,14 +46,20 @@ public class RenderControler
             Subject.Slice();
           }
         frame = Visualizer.Render(frame, Subject);
+        frame.endCamera();
         return frame;
       }
   
     public PGraphics RenderBuildSpace(PGraphics frame)
       {
+        frame.beginDraw();
         frame.beginCamera();
         frame = Camera.setCamera(frame);
+        frame.lights();
+        frame.background(153);
         frame = addBuildSpace(frame);
+        frame.endCamera();
+        frame.endDraw();
         return frame;
         
       }
@@ -95,6 +103,7 @@ public class RenderControler
          frame.endShape();
          
          //floor
+         
          frame.tint(255, 255);
          frame.beginShape();
          frame.vertex(0, 0, 0);
@@ -103,14 +112,13 @@ public class RenderControler
          frame.vertex(Width, 0, 0);
          frame.endShape();
          
+         
          return frame; 
       }
   
     public void ResetCamera()
       {
-        //TODO deceied where camera starts Camera.setpos();
-        //TODO deceied where focus startsCamera.setFocus(); 
-        Camera.setUp(new PVector(1,1,1));
+        Camera = new POV(new PVector(0, 0, Height), new PVector(Width/2, Length/2, 0),new PVector(1,1,1));
       }
      
     public void FocusOnModel(Model Subject)
@@ -132,6 +140,16 @@ public class RenderControler
         Width = w;
         Length = l;
         Height = h;
+      }
+      
+    public POV getPOV()
+      {
+         return Camera; 
+      }
+      
+    public void SetPOV(POV Camera)
+      {
+          this.Camera = Camera;
       }
       
     public void SetMode(boolean mode)

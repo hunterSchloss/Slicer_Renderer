@@ -131,18 +131,18 @@ public class Model
                float distance = PVector.dist(temp[i], center); 
           
           
-               //rotate around y axis 
-               temp[i].y += distance * cos(amount.y);
-               temp[i].x = distance * sin(amount.y);
+               //rotate around x axis 
+               temp[i].z = center.z +  distance * cos(amount.x);
+               temp[i].y = center.y + distance * sin(amount.x);
               
-               //rotate around X axis 
-               temp[i].x += distance * cos(amount.x);
-               temp[i].z = distance * sin(amount.x);
+               //rotate around y axis 
+               temp[i].z = center.z +  distance * cos(amount.y);
+               temp[i].x = center.x + distance * sin(amount.y);
           
           
                //rotate around z axis 
-               temp[i].z += distance * cos(amount.z);
-               temp[i].y = distance * sin(amount.z);
+               temp[i].y = center.y + distance * cos(amount.z);
+               temp[i].x = center.x + distance * sin(amount.z);
             }
             facet.setVertices(temp[0], temp[1], temp[2]);
          }

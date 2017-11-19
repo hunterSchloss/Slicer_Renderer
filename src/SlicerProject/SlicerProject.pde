@@ -10,10 +10,19 @@ Authors:
 
 //This function is automatically called when the project is run/executed.
 // Once this function finished executing, the draw function is called (repeatedly).
+
+PGraphics rendering;
+RenderControler vis;
+boolean realsed = true;
+
+int last;
+
 void setup() {
-  size(200, 200, P3D);
-  
-  
+  size(800, 800, P3D);
+  vis = new RenderControler(100,100,100);
+  rendering = createGraphics(300, 300, P3D);
+  vis.RenderBuildSpace(rendering);
+  vis.RenderBuildSpace(rendering);
 }
 
 //After the setup function finishes, this function is called repeatedly until the
@@ -22,4 +31,22 @@ void setup() {
 // treat the setup function as if it were similar to a main function in C/C++/Java.
 void draw() {
   
+  if(!realsed && !mousePressed)
+    {
+      POV temp = vis.getPOV();
+      temp.Rotate(new PVector(last - mouseX,0,0));
+      vis.SetPOV(temp);
+      vis.RenderBuildSpace(rendering);
+      realsed = true;
+    }
+  else if(mousePressed && realsed)
+    {
+      realsed = false;
+      last = mouseX;
+    }
+    else{
+      
+    }
+  
+  image(rendering, 10 ,10);
 }
