@@ -29,7 +29,7 @@ void setup() {
   vis = new RenderControler(100,100,100);
   vis.ResetCamera();
   
-  String adress = "C:\\Users\\200Motels\\Documents\\GitHub\\Slicer_Renderer\\40mmcube.stl";
+  String adress = "../../40mmcube.stl";
   STLParser parser = new STLParser(adress);
   ArrayList<Facet> data = parser.parseSTL();
   test = new Model(data, .1, .1);
