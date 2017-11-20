@@ -46,16 +46,11 @@ void draw() {
     // One and ONLY one of these function calls should be uncommented
     
     
-    // One vertex of one facet appears to be 'stuck' to the origin as the model is
-    // translated away from the origin. The other vertices of this facet appear to
-    // be located at the lower corners of the cube on the side facing the origin.
-    //modelTranslationTest();
+    modelTranslationTest(); // Seems to work
     
     //modelScalingTest(); // Seems to work
     
-    //modelRotationTest(); // Not currently implemented
-    
-    rotationTest(); // Cube sometimes "jumps" to opposite side
+    //rotationTest(); // Z axis rotation isn't correct
 }
 
 
