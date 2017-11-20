@@ -121,6 +121,29 @@ class Facet {
       return false;
     }
   }
+  
+  public PVector GetLowest()
+    {
+      if(vertex1.z < vertex2.z)
+        {
+          if(vertex3.z < vertex1.z)
+            {
+              return vertex3;
+            }
+          else
+            {
+              return vertex1;
+            }
+        }
+      else if(vertex2.z < vertex3.z)
+        {
+          return vertex2;
+        }
+      else
+        {
+          return vertex3;
+        }
+    }
 
   //getter for facetNormal
   

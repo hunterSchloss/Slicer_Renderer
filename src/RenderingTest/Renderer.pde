@@ -12,9 +12,6 @@ Renderer.pde
   Hunter Schloss
  */
 
-class Renderer {
-  int TopLeft;
-  int BottomRight;
-  public Renederer(int TL, int BR);
-  public Render(Model subject, POV perspective); 
+interface Renderer {
+  public PGraphics Render(PGraphics graphic, Model Subject); 
  }
