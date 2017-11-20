@@ -44,7 +44,12 @@ void setup() {
 //Depending on how the project proceeds, we may not use this function, and instead
 // treat the setup function as if it were similar to a main function in C/C++/Java.
 void draw() {
-    modelTranslationTest();
+    // One and ONLY one of these function calls should be uncommented
+    
+    //modelTranslationTest(); // Seems to work
+    //modelScalingTest(); // Seems to work
+    //modelRotationTest(); // Not currently implemented
+    rotationTest(); // Cube sometimes "jumps" to opposite site
 }
 
 
