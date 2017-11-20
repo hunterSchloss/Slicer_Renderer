@@ -3,7 +3,7 @@ class POV {
   private PVector location;
   private PVector focus;
   private float   distance;
-  private PVector orientation;
+  private PVector orientation; // Not currently used
   private float   phi;
   private float   theta;
 
@@ -54,7 +54,7 @@ class POV {
     {
       this.theta += theta;
       this.phi += phi;
-      fixAngles();
+      //fixAngles();
       CalculteLocation(); 
     }
     

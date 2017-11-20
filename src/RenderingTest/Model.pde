@@ -131,7 +131,7 @@ public class Model
            facet.setVertices(temp[0].add(X,Y,0), temp[1].add(X,Y,0), temp[2].add(X,Y,0));
         }
       isModified = true;
-      levelModel();    
+      //levelModel();    
     }
     
   

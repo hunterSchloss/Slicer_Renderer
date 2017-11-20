@@ -14,7 +14,6 @@ Authors:
 PGraphics rendering;
 RenderControler vis;
 boolean realsed = true;
-
 int i=0;
 int j=0;
 
@@ -46,10 +45,17 @@ void setup() {
 void draw() {
     // One and ONLY one of these function calls should be uncommented
     
-    //modelTranslationTest(); // Seems to work
+    
+    // One vertex of one facet appears to be 'stuck' to the origin as the model is
+    // translated away from the origin. The other vertices of this facet appear to
+    // be located at the lower corners of the cube on the side facing the origin.
+    //modelTranslationTest();
+    
     //modelScalingTest(); // Seems to work
+    
     //modelRotationTest(); // Not currently implemented
-    rotationTest(); // Cube sometimes "jumps" to opposite site
+    
+    rotationTest(); // Cube sometimes "jumps" to opposite side
 }
 
 
@@ -90,9 +96,16 @@ void modelScalingTest()
 
 
 void modelRotationTest()
-  {
-  //TODO
+{
+  if (mousePressed) {
+    test.Rotate(5.0, 0);
+  } else {
+    test.Rotate(0, 5.0);
   }
+  
+  vis.Render(test, rendering);
+  image(rendering, 50, 50);
+}
 
 void rotationTest()
   {
