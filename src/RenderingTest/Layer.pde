@@ -73,4 +73,9 @@ public class Layer
     
   }
   
+  public float getHeight()
+    {
+      return zHeight;
+    }
+  
 }

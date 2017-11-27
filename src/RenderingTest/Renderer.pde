@@ -13,5 +13,5 @@ Renderer.pde
  */
 
 interface Renderer {
-  public PGraphics Render(PGraphics graphic, Model Subject); 
+  public PShape Render(Model Subject); 
  }

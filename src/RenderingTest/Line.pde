@@ -25,4 +25,24 @@ public class Line {
     this.y2 = y2;
     this.isTravel = isTravel;
   }
+  
+   public float[] getPoints()
+     {
+       float[] out;
+       if(x1 < x2)
+         {
+           out  = new float[]{x1,y1,x2,y2};
+         }
+       else
+         {
+           out  = new float[]{x2,y2,x1,y1};
+         }
+       
+       return  out;
+     }
+   
+   public boolean getIsTravle()
+     {
+       return isTravel;
+     }
 }

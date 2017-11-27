@@ -3,7 +3,6 @@ class POV {
   private PVector location;
   private PVector focus;
   private float   distance;
-  private PVector orientation; // Not currently used
   private float   phi;
   private float   theta;
 
@@ -15,7 +14,6 @@ class POV {
       
       this.focus = foc;
       
-      this.orientation = new PVector();
       this.location = new PVector();
       
       fixAngles();
@@ -54,7 +52,7 @@ class POV {
     {
       this.theta += theta;
       this.phi += phi;
-      //fixAngles();
+      fixAngles();
       CalculteLocation(); 
     }
     
@@ -78,23 +76,23 @@ class POV {
   private void fixAngles()
     {
       theta = theta - int(theta / 360)*360;
-      phi = phi -  int(phi / 180)*180;
+      phi = phi -  int(phi / 360)*360;
       if(theta < 0)  
         {
           theta += 360;
         }
       if(phi < 0)
         {
-          phi += 180;
+          phi += 360;
         }
         
     }
   
   private void CalculteLocation()
     {
-      location.x = focus.x + distance * sin(radians(theta))*sin(radians(phi));
-      location.y = focus.y + distance * -cos(radians(phi));
-      location.z = focus.z + distance * -cos(radians(theta))*sin(radians(phi)); 
+      location.y = focus.y + distance * sin(radians(theta))*sin(radians(phi));
+      location.z = focus.z + distance * -cos(radians(phi));
+      location.x = focus.x + distance * -cos(radians(theta))*sin(radians(phi)); 
      
       
     }

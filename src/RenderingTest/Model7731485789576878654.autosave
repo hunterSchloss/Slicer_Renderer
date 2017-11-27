@@ -229,11 +229,6 @@ public class Model
     {
       return layers;
     }
-    
-  public void TestSetLayers(ArrayList<Layer> newLayers)  
-    {
-      layers = newLayers;
-    }
   
   
   public void levelModel()

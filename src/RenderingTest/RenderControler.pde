@@ -42,18 +42,42 @@ public class RenderControler
         frame.lights();
         frame.background(255);
         
+        PShape Drawing;
         if(Subject.isModified() && !RenderFacets)
           {
-            Subject.Slice();
+            
+             Drawing = new FacetRenderer().Render(Subject); //<>// //<>//
           }
-        frame.fill(255,0,0);
-        frame = Visualizer.Render(frame, Subject);
-        
+         else
+          {
+              Drawing = Visualizer.Render(Subject);
+          }
+          
+        frame.shape(Drawing);
         frame = addBuildSpace(frame);
+        
         frame.endCamera();
-         frame.endDraw();
+        frame.endDraw();
         return frame;
       }
+      
+    public PGraphics testLayerRenderer(Model Subject, PGraphics frame)
+      {
+        frame.beginDraw();
+        frame.beginCamera();
+        Camera.setCamera(frame);
+        frame.lights();
+        frame.background(255);
+        
+        frame.shape(new LayerRenderer().Render(Subject));
+        frame = addBuildSpace(frame);
+        
+        frame.endCamera();
+        frame.endDraw();
+        return frame;
+      }
+      
+      
   
     public PGraphics RenderBuildSpace(PGraphics frame)
       {
@@ -107,7 +131,7 @@ public class RenderControler
          frame.endShape();
          
          //floor
-         frame.fill(0);
+         frame.fill(125);
          frame.beginShape();
          frame.vertex(0, 0, 0);
          frame.vertex(0, Length, 0);
@@ -123,7 +147,7 @@ public class RenderControler
       {
         //theta specifies the angle of rotation arond the x axis
         //phi spevifies the angle of rotation around the z axis
-        Camera = new POV(90, 60, (Height+Length+Width)/1.5,  new PVector(Width/2, Length/2, Height/2));
+        Camera = new POV(30, 100, (Height+Length+Width)/1.5,  new PVector(Width/2, Length/2, Height/2));
       }
      
     public void FocusOnModel(Model Subject)
@@ -174,7 +198,7 @@ public class RenderControler
               }
             else
               {
-                //Visualizer = new LayerRendrer();
+                Visualizer = new LayerRenderer();
               }            
           }
       }
