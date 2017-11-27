@@ -55,6 +55,11 @@ public class Layer
     return lines;
   }
   
+  public void addLine(Line in)
+    {
+      lines.add(in);
+    }
+  
   
   /*
     This method will clear out the current lines ArrayList<Line> and add in a new line object for each line object in newLineList

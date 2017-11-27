@@ -1,9 +1,12 @@
 /*
-FacetRenderer.pde
+LayerRenderer.pde
  
-This Sketchbook tab holds the definition and implementation of the Facet Renderer class.
+This Sketchbook tab holds the definition and implementation of the Layer Renderer class.
  
-the Facet Renderer class is an implintaion of the Renderer interface for rendering Facets 
+the Layer Renderer class is an implintaion of the Renderer interface for rendering a simulation of a GCode file
+
+it contines methods to controle the visability of indvidule layers and weather or not to render the lines when the printer is not exdruding 
+
 
  
  Authors:
@@ -38,23 +41,26 @@ class LayerRenderer implements Renderer
            }
          PShape out = createShape(GROUP);
          int i=0;
+         float LayerHeight = Subject.getLayerHeight();
          for(Layer curLayer: layers)
            {
              if(isVisible[i])
                {
                  float Height = curLayer.getHeight();
-                 for(Line curLine: curLayer.getCoordinates())
+                 ArrayList<Line> temp = curLayer.getCoordinates();
+                 for(Line curLine: temp)
                    {
-                     if(curLine.getIsTravle())
+                     if(!curLine.getIsTravle())
                        {
-                         out.addChild(DrawCylinder(curLine, .2, Height));
+                        out.addChild(DrawCylinder(curLine, LayerHeight, Height));
                        }
                      else
                        {
-                         //TODO implment function to render travle lines
+                         out.addChild(drawLine(curLine, Height));
                        }
                    }
-               }         
+               } 
+               i++;
            }
          return out;
        }
@@ -109,7 +115,19 @@ class LayerRenderer implements Renderer
           out.rotateZ(PVector.angleBetween(new PVector(0,1), placA));
           
           out.translate(temp[1], temp[0], currentHeight);
+         
           return out;
        } 
+       
+       private PShape drawLine(Line path, float Height)
+         {
+           PShape out = createShape();
+           float[] temp = path.getPoints();
+           out.beginShape(LINE);
+           out.vertex(temp[0], temp[1], Height);
+           out.vertex(temp[2], temp[3], Height);
+           out.endShape(CLOSE);
+           return out;
+         }
        
   }

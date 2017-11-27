@@ -45,4 +45,14 @@ public class Line {
      {
        return isTravel;
      }
+     
+   public void swapPoints()
+    {
+      float temp = x2;
+      x2 = x1;
+      x1 = temp;
+      temp = y2;
+      y2 = y1;
+      y1 = temp;
+    }
 }

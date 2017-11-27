@@ -18,6 +18,8 @@ public class RenderControler
     
     private Renderer Visualizer;
     
+    private PVector DefaultFocus;
+    
     private boolean RenderFacets;
     
     
@@ -28,6 +30,8 @@ public class RenderControler
         Width = W;
         Length = L;
         Height = H;
+        
+        DefaultFocus = new PVector(Width/2, Length/2, Height/2);
         
         RenderFacets = true;
         Visualizer = new FacetRenderer();
@@ -45,16 +49,17 @@ public class RenderControler
         PShape Drawing;
         if(Subject.isModified() && !RenderFacets)
           {
-            
-             Drawing = new FacetRenderer().Render(Subject); //<>// //<>//
+             Drawing = new FacetRenderer().Render(Subject);
           }
          else
           {
               Drawing = Visualizer.Render(Subject);
           }
-          
-        frame.shape(Drawing);
-        frame = addBuildSpace(frame);
+        for(int i=0; i<Drawing.getChildCount(); i++)
+          {
+            frame.shape(Drawing.getChild(i));
+          }
+        frame = addBuildSpace(frame); //<>//
         
         frame.endCamera();
         frame.endDraw();
@@ -147,18 +152,32 @@ public class RenderControler
       {
         //theta specifies the angle of rotation arond the x axis
         //phi spevifies the angle of rotation around the z axis
-        Camera = new POV(30, 100, (Height+Length+Width)/1.5,  new PVector(Width/2, Length/2, Height/2));
+        Camera = new POV(30, 100, (Height+Length+Width)/1.5,  DefaultFocus);
       }
      
     public void FocusOnModel(Model Subject)
       {
+        DefaultFocus = Subject.getCenter();
         Camera.setFocus(Subject.getCenter());
       }
+      
+    public boolean isFocusedOnModel(Model Subject)
+      {
+        if(PVector.dist(Subject.getCenter(), DefaultFocus) < .01)
+          {
+            return true;
+          }
+        else
+          {
+            return false;
+          }
+      }
+      
       
     public void CenterModelOnBuildPlate(Model Subject)
       {
         PVector center = Subject.getCenter();
-        Subject.Translate(Width/2 - center.x, Length/2 - center.y);
+        Subject.Translate(Width/2 - center.x, Length/2 - center.y, this);
       }
   
     public float[] getDim()

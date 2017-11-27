@@ -31,11 +31,9 @@ void setup() {
   String adress = "../../40mmcube.stl";
   STLParser parser = new STLParser(adress);
   ArrayList<Facet> data = parser.parseSTL();
-  test = new Model(data, .1, .1);
-  
-  //vis.Render(test, rendering);
-  //image(rendering, 50 ,50);
-  
+  test = new Model(data);  
+  vis.CenterModelOnBuildPlate(test);
+  test.Slice(.2,.5);
 }
 
 //After the setup function finishes, this function is called repeatedly until the
@@ -46,16 +44,29 @@ void draw() {
     // One and ONLY one of these function calls should be uncommented
     
     
-   // modelTranslationTest(); // Seems to work
+    //modelTranslationTest(); // Seems to work
     
     //modelScalingTest(); // Seems to work
     
-    rotationTest(); // Z axis rotation isn't correct
+    //rotationTest(); // Z axis rotation isn't correct
+    
+    //ZoomTest();
     
     //testLayerRenderer();
     testFacetRenderer();
+    
+   //testSliceAndRender();
 
 }
+
+
+void testSliceAndRender()
+  {
+     vis.SetMode(false);
+     rendering = vis.Render(test, rendering);
+     
+     image(rendering, 50 ,50);
+  }
 
 
 
@@ -63,15 +74,16 @@ void testLayerRenderer()
   {
     ArrayList<Line> testLayerRenderer = new ArrayList<Line>();
     testLayerRenderer.add(new Line(1, 1, 10, 10, false));
-    testLayerRenderer.add(new Line(10, 10, 20, 15, false));
+    testLayerRenderer.add(new Line(10, 10, 20, 15, true));
     testLayerRenderer.add(new Line(20, 15, 30, 10, false));
-    testLayerRenderer.add(new Line(30, 10, 25, 5, false));
+    testLayerRenderer.add(new Line(30, 10, 25, 5, true));
     testLayerRenderer.add(new Line(25, 5, 20, 10, false));
-    testLayerRenderer.add(new Line(20, 10, 10, 5, false));
+    testLayerRenderer.add(new Line(20, 10, 10, 5, true));
     ArrayList<Layer> temp = new ArrayList<Layer>();
     temp.add(new Layer(testLayerRenderer, 10));
     test.TestSetLayers(temp);
     vis.SetMode(false);
+    
     vis.testLayerRenderer(test, rendering);
     
     image(rendering, 50 ,50);
@@ -87,49 +99,17 @@ void testFacetRenderer()
   }
 
 
-PVector GetPoint(int n, int k, float radius, PVector center, PVector angle)
-       {
-         PVector point = new PVector(center.x + radius*sin(radians((360/k)*n)), center.y, center.z + radius*cos(radians((360/k)*n))); //caculate point of the curcil to return
-         PVector axisIntercept = new PVector();
-         float radiusOfRotation;
-         
-         //rotate around the x axis
-         axisIntercept.set(new PVector(point.x, point.y, center.z));
-         radiusOfRotation = abs(PVector.dist(axisIntercept, point));
-         point.y = point.y + radiusOfRotation * sin(angle.x);
-         point.z =  center.z + radiusOfRotation * cos(angle.x);
-         
-         //roate around the y axis 
-         axisIntercept.set(new PVector(center.x, point.y, center.z));
-         radiusOfRotation = abs(PVector.dist(axisIntercept, point));
-         point.x = point.y + radiusOfRotation * sin(angle.y);
-         point.z =  center.z + radiusOfRotation * cos(angle.y);
-         
-         //roate around the z axis 
-         axisIntercept.set(new PVector(center.x, center.y, point.z));
-         radiusOfRotation = abs(PVector.dist(axisIntercept, point));
-         point.x = center.x + radiusOfRotation * sin(angle.z);
-         point.y =  center.y + radiusOfRotation * cos(angle.z);
-         
-         return point;
-         
-         
-       }
-
-
-
-
 void modelTranslationTest()
   {
     if(mousePressed)
     {
-      test.Translate(1,1);
+      test.Translate(1,1, vis);
       vis.Render(test, rendering);
       image(rendering, 50 ,50);
     }
     else
       {
-      test.Translate(-1,-1);
+      test.Translate(-1,-1, vis);
       vis.Render(test, rendering);
       image(rendering, 50 ,50);
       }
@@ -139,13 +119,13 @@ void modelScalingTest()
   {
     if(mousePressed)
     {
-      test.Scale(new PVector(1.01,1.01, 1.01));
+      test.Scale(new PVector(1.01,1.01, 1.01), vis);
       vis.Render(test, rendering);
       image(rendering, 50 ,50);
     }
     else
       {
-      test.Scale(new PVector(.99, .99, .99));
+      test.Scale(new PVector(.99, .99, .99), vis);
       vis.Render(test, rendering);
       image(rendering, 50 ,50);
       }
@@ -156,14 +136,35 @@ void modelScalingTest()
 void modelRotationTest()
 {
   if (mousePressed) {
-    test.Rotate(5.0, 0);
+    test.Rotate(5.0, 0, vis);
   } else {
-    test.Rotate(0, 5.0);
+    test.Rotate(0, 5.0, vis);
   }
   
   vis.Render(test, rendering);
   image(rendering, 50, 50);
 }
+
+
+void ZoomTest()
+  {
+   if(mousePressed)
+      {
+        POV temp = vis.getPOV();
+        temp.zoom(1);
+        vis.SetPOV(temp);
+        vis.Render(test, rendering);
+        image(rendering, 50 ,50);
+      }
+   else
+      {
+        POV temp = vis.getPOV();
+        temp.zoom(-1);
+        vis.SetPOV(temp);
+        vis.Render(test, rendering);
+        image(rendering, 50 ,50);
+      }
+  }
 
 void rotationTest()
   {
