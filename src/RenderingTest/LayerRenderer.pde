@@ -19,16 +19,20 @@ class LayerRenderer implements Renderer
     boolean[] isVisible;
     boolean RenderTravles;
     int numLayers;
+    ArrayList<Layer> layers;
+    int size; 
+    
+    float LayerHeight;
     
     public LayerRenderer()
       {
         numLayers = 0;
         RenderTravles = false;
       }
-    
-     public PShape Render(Model Subject)
+      
+     public void Load(Model subject)
        {
-         ArrayList<Layer> layers = Subject.getLayers();
+         layers = subject.getLayers();
          if(layers.size() != numLayers)
            {
              isVisible = new boolean[layers.size()];
@@ -39,29 +43,53 @@ class LayerRenderer implements Renderer
                }
                RenderTravles = false;
            }
-         PShape out = createShape(GROUP);
-         int i=0;
-         float LayerHeight = Subject.getLayerHeight();
+           
+         LayerHeight = subject.getLayerHeight();  
+           
+         size = 0;
          for(Layer curLayer: layers)
            {
-             if(isVisible[i])
-               {
-                 float Height = curLayer.getHeight();
-                 ArrayList<Line> temp = curLayer.getCoordinates();
-                 for(Line curLine: temp)
-                   {
-                     if(!curLine.getIsTravle())
-                       {
-                        out.addChild(DrawCylinder(curLine, LayerHeight, Height));
-                       }
-                     else
-                       {
-                         out.addChild(drawLine(curLine, Height));
-                       }
-                   }
-               } 
-               i++;
+             size += curLayer.size();
            }
+       }
+       
+     public int getSize()
+       {
+          return size; 
+       }
+    
+     public PShape Render(int i)
+       {
+         int count = 0;
+         int place = 0;
+         if(i >= size)
+           {
+             return createShape();
+           }
+         while(count < i)
+           {
+             count += layers.at(place).size();
+             place ++;
+           }
+         count -= layers.at(place).size();
+         
+         PShape out = createShape();
+         
+         if(isVisible[place])
+           {
+             Layer curLayer = layers.at(place);
+             Line curLine = curLayer.at(i - count);
+             float Height = curLayer.getHeight();
+                 
+             if(!curLine.getIsTravle())
+               {
+                 out.addChild(DrawCylinder(curLine, LayerHeight, Height));
+               }
+             else
+               {
+                 out.addChild(drawLine(curLine, Height));
+               }
+           } 
          return out;
        }
     
