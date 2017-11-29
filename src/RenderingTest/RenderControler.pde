@@ -46,20 +46,27 @@ public class RenderControler
         frame.lights();
         frame.background(255);
         
-        PShape Drawing;
+        int lim;
         if(Subject.isModified() && !RenderFacets)
           {
-             Drawing = new FacetRenderer().Render(Subject);
+             Renderer temp = new FacetRenderer();
+             temp.Load(Subject);
+             lim = temp.getSize();
+             for(int i=0; i<lim; i++)
+               {
+                 frame.shape(temp.Render(i));
+               }
           }
          else
           {
-              Drawing = Visualizer.Render(Subject);
+            Visualizer.Load(Subject);
+            lim = Visualizer.getSize();
+            for(int i=0; i<lim; i++)
+               {
+                 frame.shape(Visualizer.Render(i));
+               }
           }
-        for(int i=0; i<Drawing.getChildCount(); i++)
-          {
-            frame.shape(Drawing.getChild(i));
-          }
-        frame = addBuildSpace(frame); //<>//
+        frame = addBuildSpace(frame);
         
         frame.endCamera();
         frame.endDraw();
@@ -73,8 +80,15 @@ public class RenderControler
         Camera.setCamera(frame);
         frame.lights();
         frame.background(255);
+        Visualizer =  new LayerRenderer();
+        Visualizer.Load(Subject);
         
-        frame.shape(new LayerRenderer().Render(Subject));
+        int lim = Visualizer.getSize();
+        for(int i=0; i<lim; i++)
+           {
+              frame.shape(Visualizer.Render(i));
+           }
+        
         frame = addBuildSpace(frame);
         
         frame.endCamera();

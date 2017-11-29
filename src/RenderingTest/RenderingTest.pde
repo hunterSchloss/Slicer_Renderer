@@ -53,9 +53,9 @@ void draw() {
     //ZoomTest();
     
     //testLayerRenderer();
-    testFacetRenderer();
+    //testFacetRenderer();
     
-   //testSliceAndRender();
+   testSliceAndRender();
 
 }
 

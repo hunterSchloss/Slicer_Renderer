@@ -49,7 +49,7 @@ class LayerRenderer implements Renderer
          size = 0;
          for(Layer curLayer: layers)
            {
-             size += curLayer.size();
+             size += curLayer.getCoordinates().size();
            }
        }
        
@@ -66,28 +66,30 @@ class LayerRenderer implements Renderer
            {
              return createShape();
            }
-         while(count < i)
+         while(count <= i)
            {
-             count += layers.at(place).size();
+             count += layers.get(place).getCoordinates().size();
              place ++;
            }
-         count -= layers.at(place).size();
+         place --;
+         count -= layers.get(place).getCoordinates().size();
+         
          
          PShape out = createShape();
          
          if(isVisible[place])
            {
-             Layer curLayer = layers.at(place);
-             Line curLine = curLayer.at(i - count);
-             float Height = curLayer.getHeight();
+             Layer curLayer = layers.get(place);
+             Line curLine   = curLayer.getCoordinates().get(i - count);
+             float Height   = curLayer.getHeight();
                  
              if(!curLine.getIsTravle())
                {
-                 out.addChild(DrawCylinder(curLine, LayerHeight, Height));
+                 out = DrawCylinder(curLine, LayerHeight, Height);
                }
              else
                {
-                 out.addChild(drawLine(curLine, Height));
+                 out = drawLine(curLine, Height);
                }
            } 
          return out;

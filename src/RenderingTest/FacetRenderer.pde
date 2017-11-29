@@ -21,7 +21,7 @@ class FacetRenderer implements Renderer{
       
     public int getSize()
       {
-        return Mesh.getSize();
+        return Mesh.size();
       }
       
     public PShape Render(int i) 
@@ -31,7 +31,7 @@ class FacetRenderer implements Renderer{
          {
             return out; 
          }
-       PVector[] Triangle = Mesh.at(i).getVerticies();
+       PVector[] Triangle = Mesh.get(i).getVerticies();
 
            
        out.beginShape();
@@ -39,8 +39,6 @@ class FacetRenderer implements Renderer{
        out.vertex(Triangle[1].x, Triangle[1].y, Triangle[1].z);   
        out.vertex(Triangle[2].x, Triangle[2].y, Triangle[2].z);  
        out.endShape();
-           
-       out.addChild(temp);
        return out;
      }
        
