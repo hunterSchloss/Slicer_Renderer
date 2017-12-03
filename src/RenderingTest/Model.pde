@@ -14,7 +14,19 @@ Authors: Slicing Team (Andrew Figueroa)
 */
 
 public class Model
+{
+  private ArrayList<Facet> facets;
+  private boolean isModified;
+
+  
+  /**
+   * Constructor for a Model object given an ArrayList<Facet>.
+   *
+   * @param  facets  The ArrayList<Facet> to pass into this object.
+   */
+  public Model(ArrayList<Facet> facets)
   {
+
     private ArrayList<Facet>   facets;     
     private ArrayList<String>  GCode;
     private ArrayList<Layer>    layers;
