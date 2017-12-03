@@ -159,6 +159,29 @@ class Facet {
       return false;
     }
   }
+  
+  public float getLowest()
+    {
+      if(vertex1.z < vertex2.z)
+         {
+           if(vertex3.z < vertex1.z)
+             {
+               return vertex3.z;
+             }
+           else
+             {
+               return vertex1.z;
+             }
+         }
+       else if(vertex2.z < vertex3.z)
+         {
+           return vertex2.z;
+         }
+       else
+         {
+           return vertex3.z;
+         }
+    }
 
 
   /**

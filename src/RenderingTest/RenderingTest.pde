@@ -49,14 +49,16 @@ void draw() {
     
     //modelScalingTest(); // Seems to work
     
-    rotationTest(); // Z axis rotation isn't correct
+    //rotationTest(); // Z axis rotation isn't correct
     
-    ZoomTest();
+    //ZoomTest();
     
     //testLayerRenderer();
     //testFacetRenderer();
     
-   testSliceAndRender();
+   //testSliceAndRender();
+   
+   //modelRotationTest();
 
 }
 
@@ -79,14 +81,14 @@ void testLayerRenderer()
   {
     ArrayList<Line> testLayerRenderer = new ArrayList<Line>();
     testLayerRenderer.add(new Line(1, 1, 10, 10, false));
-    testLayerRenderer.add(new Line(10, 10, 20, 15, true));
+    testLayerRenderer.add(new Line(10, 10, 20, 15, false));
     testLayerRenderer.add(new Line(20, 15, 30, 10, false));
-    testLayerRenderer.add(new Line(30, 10, 25, 5, true));
+    testLayerRenderer.add(new Line(30, 10, 25, 5, false));
     testLayerRenderer.add(new Line(25, 5, 20, 10, false));
-    testLayerRenderer.add(new Line(20, 10, 10, 5, true));
+    testLayerRenderer.add(new Line(20, 10, 10, 5, false));
     ArrayList<Layer> temp = new ArrayList<Layer>();
     temp.add(new Layer(testLayerRenderer, 10));
-    test.TESTsetLayers(temp, 3);
+    test.TESTsetLayers(temp, .2);
     vis.SetMode(false);
     
     vis.Render(test, rendering);
@@ -141,9 +143,9 @@ void modelScalingTest()
 void modelRotationTest()
 {
   if (mousePressed) {
-    test.Rotate(5.0, 0, vis);
+    test.Rotate(5.0, 0, 0, vis);
   } else {
-    test.Rotate(0, 5.0, vis);
+    test.Rotate(0, 5.0, 0, vis);
   }
   
   vis.Render(test, rendering);

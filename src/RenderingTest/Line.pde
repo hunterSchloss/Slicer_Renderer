@@ -61,6 +61,24 @@ public class Line {
     }
     
   }
+  
+  public float[] getPoints()
+    {
+      if(x1 < x2)
+        {
+          return new float[]{x1,y1,x2,y2};
+        }
+      else
+        {
+           return new float[]{x2,y2,x1,y1};
+        }
+    }
+  
+  public boolean isTravle()
+    {
+       return isTravel;   
+      
+    }
 
   /**
    * This method will swap the x1/y1 and x2/y2 points of the line.

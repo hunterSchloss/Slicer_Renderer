@@ -61,6 +61,11 @@ public class Layer
   {
     return lines;
   }
+  
+  public float getHeight()
+    {
+      return zHeight;  
+    }
 
   /**
    * This method will clear the current contents of the ArrayList<> lines and add all elements

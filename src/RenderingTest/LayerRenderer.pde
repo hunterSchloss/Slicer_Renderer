@@ -89,7 +89,7 @@ class LayerRenderer implements Renderer
              Line curLine   = curLayer.getCoordinates().get(i - count);
              float Height   = curLayer.getHeight();
                  
-             if(!curLine.getIsTravle())
+             if(!curLine.isTravle())
                {
                  out = DrawCylinder(curLine, LayerHeight, Height);
                }

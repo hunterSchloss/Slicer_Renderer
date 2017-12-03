@@ -16,6 +16,8 @@ Authors: Slicing Team (Andrew Figueroa)
 public class Model
 {
   private ArrayList<Facet> facets;
+  private ArrayList<Layer> layers;
+  private ArrayList<String> GCode;
   private boolean isModified;
 
   
@@ -24,21 +26,11 @@ public class Model
    *
    * @param  facets  The ArrayList<Facet> to pass into this object.
    */
-  public Model(ArrayList<Facet> facets)
-  {
-
-    private ArrayList<Facet>   facets;     
-    private ArrayList<String>  GCode;
-    private ArrayList<Layer>    layers;
+  
   
     private float layerHeight;
     
     private PVector center;
-  
- 
-  
-  
-    private boolean isModified;
                             
   
   
@@ -57,7 +49,7 @@ public class Model
        layerHeight = LH;
        Slicer alg = new Slicer(facets, layerHeight, InFill);
        layers = alg.sliceLayers();
-       GCode = alg.createGCode(layers);    
+       GCode = alg.createGCode(layers, 160, 50);    
        synchronize();
        isModified = false;
     }  
@@ -102,20 +94,24 @@ public class Model
   
     //theta specifies the angle of rotation arond the x axis
     //phi spevifies the angle of rotation around the z axis
-  public void Rotate(float theta, float phi, RenderControler renderer)
+  public void Rotate(float theta, float phi, float iota, RenderControler renderer)
     {
-      if(theta == 0 && phi == 0)
-        {
-          return;
-        }  
+      if(theta == 0 && phi == 0 && iota == 0)
+      {
+        return;
+      }
+
       boolean update = false;
+
       if(renderer.isFocusedOnModel(this))
         {
           update = true;
         }
+
       theta = theta - int(theta / 360)*360;
       phi = phi -  int(phi / 180)*180;
-      if(theta < 0)   //<>//
+
+      if(theta < 0)  
         {
           theta += 360;
         }
@@ -123,27 +119,62 @@ public class Model
         {
           phi += 180;
         }
-     
-      
-     
-      //rotate each facet around the X, Y, and Z axis 
-      for (Facet facet : facets) 
+
+      //rotate each facet around the X, Y, and Z axis
+      for (Facet facet : facets) // For each facet.
         {
           PVector[] temp = facet.getVerticies();
-          
-          for(int i=0; i<3; i++)
+
+          for(int i=0; i<3; i++) // For each vector
             {
-               //TODO 
+              //Rotation around the x axis.
+              if(theta != 0){
+                float x1 = temp[i].x - center.x;
+                float z1 = temp[i].z - center.z;
+
+                float x2 = z1 * sin(theta) + x1 * cos(theta);
+                float z2 = z1 * cos(theta) - x1 * sin(theta);
+
+                temp[i].x = x2 + center.x;
+                temp[i].z = z2 + center.z;
+              }
+
+              // Rotation around the y axis.
+              if(phi != 0){
+                float y1 = temp[i].y - center.y;
+                float z1 = temp[i].z - center.z;
+
+                float y2 = y1 * cos(phi) - z1 * sin(phi);
+                float z2 = y1 * sin(phi) + z1 * cos(phi);
+
+                temp[i].y = y2 + center.y;
+                temp[i].z = z2 + center.z;
+              }
+
+              // Rotation around the z axis.
+              if(iota != 0){
+                float x1 = temp[i].x - center.x;
+                float y1 = temp[i].y - center.y;
+
+                float x2 = x1 * cos(iota) - y1 * sin(iota);
+                float y2 = x1 * sin(iota) + y1 * cos(iota);
+
+                temp[i].x = x2 + center.x;
+                temp[i].y = y2 + center.y;
+              }
 
             }
             facet.setVertices(temp[0], temp[1], temp[2]);
+
          }
-       isModified = true; //<>//
+
+      
        levelModel();
+
        if(update)
         {
-          renderer.FocusOnModel(this);  
-        }
+          renderer.FocusOnModel(this);
+        } //<>// //<>//
        
     }
  
@@ -259,27 +290,24 @@ public class Model
   public void levelModel()
     {
       //find lowest point
-      PVector min = facets.get(0).GetLowest();
+      float min = facets.get(0).getLowest();
       for (Facet facet : facets) 
         {
-           if(facet.GetLowest().z < min.z)
+           if(facet.getLowest() < min)
              {
-               min = facet.GetLowest();
+               min = facet.getLowest();
              }
          }
        
        //invert the value of the lowest point 
        //models above the floor are moved down
        //models bellow are moved up
-       min.z = -min.z;
-       min.x=0;
-       min.y=0;
        
        //update all facets 
        for (Facet facet : facets) 
          {
            PVector[] temp = facet.getVerticies();
-           facet.setVertices(temp[0].add(min), temp[1].add(min), temp[2].add(min));
+           facet.setVertices(temp[0].add(0,0,-min), temp[1].add(0,0,-min), temp[2].add(0,0,-min));
          }
          
        calculateCenter();
