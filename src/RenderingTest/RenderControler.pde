@@ -47,48 +47,24 @@ public class RenderControler
         frame.background(255);
         
         int lim;
+        Renderer temp;
+        temp = Visualizer;
+        
+        int tint = 256;
+        
         if(Subject.isModified() && !RenderFacets)
           {
-             Renderer temp = new FacetRenderer();
-             temp.Load(Subject);
-             lim = temp.getSize();
-             for(int i=0; i<lim; i++)
-               {
-                 frame.shape(temp.Render(i));
-               }
+             tint = 200;
+             Visualizer = new FacetRenderer();
           }
-         else
-          {
-            Visualizer.Load(Subject);
-            lim = Visualizer.getSize();
-            for(int i=0; i<lim; i++)
-               {
-                 frame.shape(Visualizer.Render(i));
-               }
-          }
-        frame = addBuildSpace(frame);
-        
-        frame.endCamera();
-        frame.endDraw();
-        return frame;
-      }
-      
-    public PGraphics testLayerRenderer(Model Subject, PGraphics frame)
-      {
-        frame.beginDraw();
-        frame.beginCamera();
-        Camera.setCamera(frame);
-        frame.lights();
-        frame.background(255);
-        Visualizer =  new LayerRenderer();
-        Visualizer.Load(Subject);
-        
-        int lim = Visualizer.getSize();
+        Visualizer.Load(Subject, 255, tint);
+        lim = Visualizer.getSize();
         for(int i=0; i<lim; i++)
            {
-              frame.shape(Visualizer.Render(i));
+             PShape drawing = Visualizer.Render(i);
+             frame.shape(drawing);
            }
-        
+        Visualizer = temp;
         frame = addBuildSpace(frame);
         
         frame.endCamera();

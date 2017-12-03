@@ -33,7 +33,8 @@ void setup() {
   ArrayList<Facet> data = parser.parseSTL();
   test = new Model(data);  
   vis.CenterModelOnBuildPlate(test);
-  test.Slice(.2,.5);
+  vis.FocusOnModel(test);
+  test.Slice(.2, .1);
 }
 
 //After the setup function finishes, this function is called repeatedly until the
@@ -48,9 +49,9 @@ void draw() {
     
     //modelScalingTest(); // Seems to work
     
-    //rotationTest(); // Z axis rotation isn't correct
+    rotationTest(); // Z axis rotation isn't correct
     
-    //ZoomTest();
+    ZoomTest();
     
     //testLayerRenderer();
     //testFacetRenderer();
@@ -63,7 +64,11 @@ void draw() {
 void testSliceAndRender()
   {
      vis.SetMode(false);
-     rendering = vis.Render(test, rendering);
+     POV temp = vis.getPOV();
+     temp.setZoom(70);
+     vis.SetPOV(temp);
+     vis.Render(test, rendering);
+     
      
      image(rendering, 50 ,50);
   }
@@ -81,10 +86,10 @@ void testLayerRenderer()
     testLayerRenderer.add(new Line(20, 10, 10, 5, true));
     ArrayList<Layer> temp = new ArrayList<Layer>();
     temp.add(new Layer(testLayerRenderer, 10));
-    test.TestSetLayers(temp);
+    test.TESTsetLayers(temp, 3);
     vis.SetMode(false);
     
-    vis.testLayerRenderer(test, rendering);
+    vis.Render(test, rendering);
     
     image(rendering, 50 ,50);
     

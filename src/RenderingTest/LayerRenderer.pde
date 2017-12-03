@@ -22,6 +22,9 @@ class LayerRenderer implements Renderer
     ArrayList<Layer> layers;
     int size; 
     
+    int fill;
+    int tint;
+    
     float LayerHeight;
     
     public LayerRenderer()
@@ -30,8 +33,11 @@ class LayerRenderer implements Renderer
         RenderTravles = false;
       }
       
-     public void Load(Model subject)
+     public void Load(Model subject, int fill, int tint)
        {
+         
+         this.fill = fill;
+         this.tint = tint;
          layers = subject.getLayers();
          if(layers.size() != numLayers)
            {
@@ -109,6 +115,7 @@ class LayerRenderer implements Renderer
 
           // draw top of the tube
           out.beginShape();
+          out.fill(fill,0,0,tint);
           for (int i = 0; i < sides; i++) 
             {
               float x = cos( radians( i * angle ) ) * LayerHeight;
@@ -119,6 +126,7 @@ class LayerRenderer implements Renderer
 
           // draw bottom of the tube
           out.beginShape();
+          out.fill(fill,0,0,tint);
           for (int i = 0; i < sides; i++)
             {
               float x = cos( radians( i * angle ) ) * LayerHeight;
@@ -129,6 +137,7 @@ class LayerRenderer implements Renderer
     
           // draw sides
           out.beginShape(TRIANGLE_STRIP);
+          out.fill(fill,0,0,tint);
           for (int i = 0; i < sides + 1; i++) 
             {
               float x = cos( radians( i * angle ) ) * LayerHeight;

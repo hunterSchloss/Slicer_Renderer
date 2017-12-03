@@ -13,10 +13,14 @@ Hunter Schloss
 
 class FacetRenderer implements Renderer{  
     ArrayList<Facet> Mesh;
+    int fill;
+    int tint;
   
-    public void Load(Model Subject)
+    public void Load(Model Subject, int fill, int tint)
       {
         Mesh = Subject.getFacets();
+        this.fill = fill;
+        this.tint = tint;
       }
       
     public int getSize()
@@ -35,6 +39,7 @@ class FacetRenderer implements Renderer{
 
            
        out.beginShape();
+       out.fill(fill, 0, 0, tint);
        out.vertex(Triangle[0].x, Triangle[0].y, Triangle[0].z);     
        out.vertex(Triangle[1].x, Triangle[1].y, Triangle[1].z);   
        out.vertex(Triangle[2].x, Triangle[2].y, Triangle[2].z);  
