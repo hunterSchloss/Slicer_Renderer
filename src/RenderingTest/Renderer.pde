@@ -13,5 +13,7 @@ Renderer.pde
  */
 
 interface Renderer {
-  public PShape Render(Model Subject); 
+  public PShape Render(int i); 
+  public void Load(Model subject, int fill, int tint);
+  public int getSize();
  }
