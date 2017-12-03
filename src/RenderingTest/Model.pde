@@ -167,9 +167,9 @@ public class Model
     }
    
    
-  public void TESTsetLayers(ArrayList<Layer> layers)
+  public void TESTsetLayers(ArrayList<Layer> layers, float LH)
     {
-     layerHeight = .2;
+     layerHeight = LH;
      this.layers = layers; 
      isModified = false;
     }
@@ -241,12 +241,6 @@ public class Model
   public ArrayList<Layer> getLayers()
     {
       return layers;
-    }
-    
-  public void TestSetLayers(ArrayList<Layer> newLayers)  
-    {
-      layerHeight = .2;
-      layers = newLayers;
     }
   
   
