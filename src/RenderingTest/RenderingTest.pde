@@ -58,7 +58,7 @@ void draw() {
 
 
   
-  testLayerVisibility();
+  //testLayerVisibility();
   
   //testFacetRenderer();
     
@@ -90,6 +90,8 @@ void testLayerVisibility() {
     POV temp = vis.getPOV();
     temp.setZoom(70);
     vis.SetPOV(temp);
+}
+}
 
 
 int TVi = 0;
@@ -122,19 +124,7 @@ void testVisability()
   }
 
 
-void testSliceAndRender()
-  {
-     vis.SetMode(false);
-     POV temp = vis.getPOV();
-     temp.setZoom(70);
-     vis.SetPOV(temp);
-     vis.Render(test, rendering);
-    vis.Render(test, rendering);
-    
-    image(rendering, 50, 50);
-    
-  }
-}
+
 
 void testSliceAndRender() {
   vis.SetMode(false);
