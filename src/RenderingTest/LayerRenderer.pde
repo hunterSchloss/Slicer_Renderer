@@ -102,6 +102,10 @@ class LayerRenderer implements Renderer
        }
     
     
+    public void setVisability(boolean[] vis)
+      {
+        isVisible = vis;
+      }
     
      private PShape DrawCylinder(Line path, float LayerHeight, float currentHeight)
        {
@@ -168,5 +172,7 @@ class LayerRenderer implements Renderer
            out.endShape(CLOSE);
            return out;
          }
+         
+       
        
   }

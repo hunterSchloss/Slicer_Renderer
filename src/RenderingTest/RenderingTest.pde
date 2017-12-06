@@ -1,5 +1,5 @@
 /*
-SlicerProject.pde
+SlicerProject.pdeP
 
 This Sketchbook tab contains the main code that runs the entire program. 
 
@@ -34,7 +34,7 @@ void setup() {
   test = new Model(data);  
   vis.CenterModelOnBuildPlate(test);
   vis.FocusOnModel(test);
-  test.Slice(.2, .1);
+ 
 }
 
 //After the setup function finishes, this function is called repeatedly until the
@@ -47,7 +47,7 @@ void draw() {
     
     //modelTranslationTest(); // Seems to work
     
-    //modelScalingTest(); // Seems to work
+    modelScalingTest(); // Seems to work
     
     //rotationTest(); // Z axis rotation isn't correct
     
@@ -58,9 +58,41 @@ void draw() {
     
    //testSliceAndRender();
    
+   testVisability();
+   
    //modelRotationTest();
 
 }
+
+
+int TVi = 0;
+void testVisability()
+  {
+     test.Slice(.2, .1);
+    boolean[] visData = new boolean[test.getLayers().size()];
+    POV cam = vis.getPOV();
+     cam.setZoom(70);
+     vis.SetPOV(cam);
+    for(int i=0; i <test.getLayers().size(); i++)
+      {
+        visData[i] = false;
+      }
+      visData[TVi] = true;
+    vis.SetMode(false);
+        
+    LayerRenderer temp = (LayerRenderer)vis.getRenderer();  
+    temp.setVisability(visData);
+    vis.setRenderer(temp);
+    vis.Render(test, rendering);
+    image(rendering, 50 ,50);
+    print(TVi, "\n");
+    TVi++;
+    if(TVi >= test.getLayers().size())
+      {
+        TVi=0;
+      }
+        
+  }
 
 
 void testSliceAndRender()

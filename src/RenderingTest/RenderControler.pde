@@ -169,6 +169,17 @@ public class RenderControler
         PVector center = Subject.getCenter();
         Subject.Translate(Width/2 - center.x, Length/2 - center.y, this);
       }
+      
+      
+    public Renderer getRenderer()
+      {
+        return Visualizer;
+      }
+      
+    public void setRenderer(Renderer Render)
+      {
+        Visualizer = Render;
+      }
   
     public float[] getDim()
       {
