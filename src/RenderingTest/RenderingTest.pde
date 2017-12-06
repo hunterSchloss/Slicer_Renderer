@@ -34,11 +34,7 @@ void setup() {
   test = new Model(data); 
   vis.CenterModelOnBuildPlate(test);
   vis.FocusOnModel(test);
-<<<<<<< HEAD
- 
-=======
 
->>>>>>> f52282ce7484ff64d9aae457180884d940e98fb3
 }
 
 //After the setup function finishes, this function is called repeatedly until the
@@ -51,11 +47,8 @@ void draw() {
     
   //modelTranslationTest(); // Laggy
     
-<<<<<<< HEAD
-    modelScalingTest(); // Seems to work
-=======
+
   //modelScalingTest(); // Seems to work
->>>>>>> f52282ce7484ff64d9aae457180884d940e98fb3
     
   //rotationTest(); // Z axis rotation isn't correct
     
@@ -71,15 +64,14 @@ void draw() {
     
 
    
-<<<<<<< HEAD
    testVisability();
    
    //modelRotationTest();
-=======
-  //modelRotationTest();
->>>>>>> f52282ce7484ff64d9aae457180884d940e98fb3
+
 
 }
+
+
 void testLayerVisibility() {
   vis.SetMode(false);
   test.Slice(0.2, 0.1);  
@@ -99,7 +91,7 @@ void testLayerVisibility() {
     temp.setZoom(70);
     vis.SetPOV(temp);
 
-<<<<<<< HEAD
+
 int TVi = 0;
 void testVisability()
   {
@@ -137,7 +129,6 @@ void testSliceAndRender()
      temp.setZoom(70);
      vis.SetPOV(temp);
      vis.Render(test, rendering);
-=======
     vis.Render(test, rendering);
     
     image(rendering, 50, 50);
@@ -152,7 +143,6 @@ void testSliceAndRender() {
   vis.SetPOV(temp);
   test.Slice(0.2, 0.1);
   vis.Render(test, rendering);
->>>>>>> f52282ce7484ff64d9aae457180884d940e98fb3
      
      
   image(rendering, 50 ,50);
