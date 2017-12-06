@@ -8,18 +8,24 @@ For more information, view the accompanying READMEs located throughout the proje
 Authors:
 */
 
-//This function is automatically called when the project is run/executed.
-// Once this function finished executing, the draw function is called (repeatedly).
+
+
+
+// These global variables appear to be unused
+//
+//int i=0;
+//int j=0;
+//int last;
+//boolean realsed = true;
 
 PGraphics rendering;
 RenderControler vis;
-boolean realsed = true;
-int i=0;
-int j=0;
-
 Model test;
 
-int last;
+
+//This function is automatically called when the project is run/executed.
+// Once this function finished executing, the draw function is called (repeatedly).
+
 
 void setup() {
   size(800, 800, P3D);
@@ -28,8 +34,8 @@ void setup() {
   vis = new RenderControler(100,100,100);
   vis.ResetCamera();
   
-  String adress = "../../40mmcube.stl";
-  STLParser parser = new STLParser(adress);
+  String address = "../../40mmcube.stl";
+  STLParser parser = new STLParser(address);
   ArrayList<Facet> data = parser.parseSTL();
   test = new Model(data); 
   vis.CenterModelOnBuildPlate(test);
@@ -72,6 +78,9 @@ void draw() {
 }
 
 
+/*
+ * Old test function, doesn't work, do not use.
+ */
 void testLayerVisibility() {
   vis.SetMode(false);
   test.Slice(0.2, 0.1);  
@@ -93,20 +102,23 @@ void testLayerVisibility() {
 }
 }
 
-
+/*
+ * This variable is only used in testVisability(), however it must be
+ * global in order to retain its value between calls (Java/Processing does
+ * not support C-style statc local variables).
+ */
 int TVi = 0;
-void testVisability()
-  {
-     test.Slice(.2, .1);
+
+void testVisability() {
+    test.Slice(.2, .1);
     boolean[] visData = new boolean[test.getLayers().size()];
     POV cam = vis.getPOV();
-     cam.setZoom(70);
-     vis.SetPOV(cam);
-    for(int i=0; i <test.getLayers().size(); i++)
-      {
+    cam.setZoom(70);
+    vis.SetPOV(cam);
+    for (int i = 0; i < test.getLayers().size(); i++) {
         visData[i] = false;
-      }
-      visData[TVi] = true;
+    }
+    visData[TVi] = true;
     vis.SetMode(false);
         
     LayerRenderer temp = (LayerRenderer)vis.getRenderer();  
@@ -116,12 +128,10 @@ void testVisability()
     image(rendering, 50 ,50);
     print(TVi, "\n");
     TVi++;
-    if(TVi >= test.getLayers().size())
-      {
+    if (TVi >= test.getLayers().size()) {
         TVi=0;
-      }
-        
-  }
+    }    
+}
 
 
 
