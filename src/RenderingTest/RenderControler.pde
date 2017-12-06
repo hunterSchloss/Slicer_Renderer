@@ -137,6 +137,16 @@ public class RenderControler
          
          return frame; 
       }
+      
+    public Renderer GetVisualizer()
+    {
+        return Visualizer;
+    }
+    
+    public void SetVisualizer(Renderer r)
+    {
+        Visualizer = r;
+    }
   
     public void ResetCamera()
       {
@@ -185,7 +195,7 @@ public class RenderControler
         Length = l;
         Height = h;
       }
-      
+    
     public POV getPOV()
       {
          return Camera; 

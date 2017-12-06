@@ -27,6 +27,16 @@ class LayerRenderer implements Renderer
     
     float LayerHeight;
     
+    public boolean[] GetVisible()
+    {
+        return isVisible;
+    }
+    
+    public void SetVisible(boolean[] b)
+    {
+        isVisible = b;
+    }
+    
     public LayerRenderer()
       {
         numLayers = 0;
