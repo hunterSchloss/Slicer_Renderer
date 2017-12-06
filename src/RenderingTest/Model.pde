@@ -19,6 +19,10 @@ public class Model
   private ArrayList<Layer> layers;
   private ArrayList<String> GCode;
   private boolean isModified;
+  
+  public int getLayerCount() {
+    return layers.size();
+  }
 
   
   /**
