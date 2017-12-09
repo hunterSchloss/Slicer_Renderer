@@ -83,7 +83,7 @@ public void draw(){
   if(mustRender)
     {
       render();
-      mustRender = false; //<>//
+      mustRender = false; //<>// //<>//
     }
     image(rendering, 70, 70);
   
@@ -97,7 +97,7 @@ public void draw(){
 
 void render()
   {
-    rendering = vis.Render(test, rendering); //<>// //<>//
+    rendering = vis.Render(test, rendering); //<>// //<>// //<>//
   }
 
  public static float round2(float number, int scale) {
@@ -199,7 +199,8 @@ public void areaTextfield_change(GTextField source, GEvent event) {
             yArea = area;
         else if (source == zTextBox)
             zArea = area;
-
+        vis.setDim(xArea, yArea, zArea);
+        mustRender = true;
         println("x: " + xArea + ", y: " + yArea + ", z: " + zArea);
         logTextBox.appendText("x: " + xArea + ", y: " + yArea + ", z: " + zArea);
     }
@@ -434,21 +435,37 @@ public void logCloseBtn_click(GButton source, GEvent event) {
 public void rightArrowbtn_click1(GButton source, GEvent event) { //_CODE_:rightArrowbtn:338278:
   println("rightArrowbtn - GButton >> GEvent." + event + " @ " + millis());
   logTextBox.appendText("Right arrow button clicked");
+  POV temp = vis.getPOV();
+  temp.Rotate(1,0);
+  vis.SetPOV(temp);
+  mustRender = true;
 } //_CODE_:rightArrowbtn:338278:
 
 public void upArrowbtn_click1(GButton source, GEvent event) { //_CODE_:upArrowbtn:481853:
   println("upArrowbtn - GButton >> GEvent." + event + " @ " + millis());
   logTextBox.appendText("Up arrow button clicked");
+  POV temp = vis.getPOV();
+  temp.Rotate(0,1);
+  vis.SetPOV(temp);
+  mustRender = true;
 } //_CODE_:upArrowbtn:481853:
 
 public void leftArrowbtn_click1(GButton source, GEvent event) { //_CODE_:leftArrowbtn:840976:
   println("leftArrowbtn - GButton >> GEvent." + event + " @ " + millis());
   logTextBox.appendText("Left arrow button clicked");
+  POV temp = vis.getPOV();
+  temp.Rotate(-1,0);
+  vis.SetPOV(temp);
+  mustRender = true;
 } //_CODE_:leftArrowbtn:840976:
 
 public void downArrowbtn_click1(GButton source, GEvent event) { //_CODE_:downArrowbtn:888588:
   println("downArrowbtn - GButton >> GEvent." + event + " @ " + millis());
   logTextBox.appendText("Down arrow button clicked");
+  POV temp = vis.getPOV();
+  temp.Rotate(0,-1);
+  vis.SetPOV(temp);
+  mustRender = true;
 } //_CODE_:downArrowbtn:888588:
 
 
@@ -506,7 +523,7 @@ public void confirmBtn_click(GButton source, GEvent event) { //_CODE_:confirmBtn
     confirmedClicked = true;
   }
 
-  //Slicing functions - move to a separate "slice" button
+  //Slicing functions - move to a separate "slice" button //<>// //<>//
   STLParser parser = new STLParser(STLFile); // Change %FILENAME% to the file name of the STL.
   ArrayList<Facet> facets = parser.parseSTL();
   // Slice object; includes output for timing the slicing procedure.
@@ -522,7 +539,7 @@ public void confirmBtn_click(GButton source, GEvent event) { //_CODE_:confirmBtn
     test.Slice(.2, .5);
     vis.CenterModelOnBuildPlate(test);
     vis.FocusOnModel(test);
-    mustRender = true; //<>//
+    mustRender = true;
 
 } //_CODE_:confirmBtn:275116:
 
@@ -631,6 +648,7 @@ public void createGUI(){
   xTextBox = new GTextField(this, 1240, 235, 70, 30, G4P.SCROLLBARS_NONE);
   xTextBox.setOpaque(true);
   xTextBox.addEventHandler(this, "areaTextfield_change");
+  xTextBox.setText("100");
 
   //Y Label
   yLabel = new GLabel(this, 1155, 290, 80, 20);
@@ -642,6 +660,7 @@ public void createGUI(){
   yTextBox = new GTextField(this, 1240, 285, 70, 30, G4P.SCROLLBARS_NONE);
   yTextBox.setOpaque(true);
   yTextBox.addEventHandler(this, "areaTextfield_change");
+  yTextBox.setText("100");
 
   //Z Label
   zLabel = new GLabel(this, 1155, 340, 80, 20);
@@ -652,6 +671,7 @@ public void createGUI(){
   //Z TextBox
   zTextBox = new GTextField(this, 1240, 335, 70, 30, G4P.SCROLLBARS_NONE);
   zTextBox.setOpaque(true);
+  zTextBox.setText("100");
   zTextBox.addEventHandler(this, "areaTextfield_change");
 
   //Quality Label
@@ -912,9 +932,9 @@ int quality;           //Low, Medium, High (0, 1, 2)
 boolean printWhenReady;
 float infill;          // infill % (0 - 1)
 String filePath;
-int xArea;             //Range 1-200 for build area in x, y, z
-int yArea;
-int zArea;
+int xArea = 100;             //Range 1-200 for build area in x, y, z
+int yArea = 100;
+int zArea = 100;
 float nozzleDiameter;  //range 0-1
 float layerScale;       //range range 0 - 0.4
 
